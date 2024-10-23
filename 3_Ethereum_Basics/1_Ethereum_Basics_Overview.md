@@ -230,4 +230,26 @@
 
 ### Lesson 3.6 - Generating Ethereum Addresses
 - Generating Ethereum Accounts in Javascript
-- 
+- Project:
+    - Use Mnemonic functions to generate randomness
+    - Generate a public/private keypair
+        - Use mnemonic as a source of randomness to create a signing keypair
+        - To generate a private key from the hex-spec, use the ethereum-js library
+
+    - Generating the private and public keys is the same for both Bitcoin and Ethereum, they both use secp256k elliptic curve cryptography
+    
+    - Deriving an account address from the public key differs slightly
+
+    - We will see how to generate an Ethereum address
+
+    - Deriving an Ethereum address from a public key requires an additional hashing algorithm, keccak256
+
+    - Taking the keccak256 hash of the public key will return 32 bytes which you need to trim down to the last 20 bytes (40 characters to hex) to get the address.
+
+    ## Recap
+
+    - This module covered:
+        - Accounts
+        - Transactions
+        - Gas and Fees
+        - Ethereum Structure
