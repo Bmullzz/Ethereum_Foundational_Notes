@@ -57,3 +57,30 @@ function transfer(address to, uint amount) external {
   balances[to] += amount;
 }
 ```
+
+-  This function is the bread and butter of ERC20 tokens, which we'll talk about later in the course. You'll see there's nothing special about the `transfer` function here from a programming standpoint. Coming from other languages this code may look quite familiar.
+- The key difference which makes this code a **smart contract** is when you take this code, compile it and deploy it to a decentralized blockchain. When you do that, the code becomes publicly available on the blockchain and the nodes in the network will enforce the logic of the code through the financial incentives of the blockchain protocol.
+- A key takeaway here is that a smart contract is code that will always run the way it is programmed. We'll take this one step at a time and you'll soon see how blockchains enforce those rules.
+
+## Cryptographic Hash Functions
+- Before diving any further we must understand the cryptographic hash function. Let's break this term down a bit. A hash function is a function which takes an input of any size and turns it into a fixed size output. Let's imagine a hash function that takes an input of any size and returns a fixed 32 byte output:
+
+| **Input**       | **Input Size**  | **Output** | **Output Size** |
+|----------       |----------       | ---------- |  ----------     |
+| 52              |  8 Bytes        |  0x41cf... |  32 bytes       |
+| "happy times"   |  22 Bytes       |  0xd6bf... |  32 bytes       |
+| monalisa.jpg    |  875000 Bytes   |  0x7cde... |  32 bytes       |
+| worldseries.mp4 |  1.6e+10  Bytes |  0x9c0e... |  32 bytes       |
+
+- These inputs get larger from top to bottom but they always map to an output of 32 bytes. There are many different [algorithms for hash functions](https://en.wikipedia.org/wiki/Hash_function#Hashing_integer_data_types) which could take these inputs and create outputs of fixed sizes.
+
+- The specific types of hash functions we are going to focus on are cryptographic hash functions. These hash functions need five specific properties. They must be:
+    - **Deterministic** - One specific input always maps to the **same** specific output
+    - **Pseudorandom** - It is not possible to guess the output based on the output of similar inputs
+    - **One-way** - If someone gives you a new output, you could not determine an input without guessing
+    - **Fast to Compute** - It must be a quick calculation for a computer
+    - **Collision-resistant** - The chance of a collision should be infinitesimally small
+
+    - Try this [sha256 online](https://emn178.github.io/online-tools/sha256) tool to prove each one of these properties to yourself. 
+
+    - With a secure cryptographic hash function you can create a unique, fixed-size representation of an input regardless of its size. For blockchains this feature is critically important for saving space. In many cases blockchains and smart contracts will not need to store an input, they can just store the hash output. Cryptographic Hash Functions will also be super important for the first successful blockchain consensus mechanism we'll talk about: **proof of work**.
