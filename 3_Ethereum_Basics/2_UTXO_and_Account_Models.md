@@ -87,3 +87,25 @@ Important notes on UTXOs:
 ## Conclusion
 
 Deciding what model to go with is a game of design tradeoffs. Ethereum uses the account-based model transactions must be more flexible to account for the many moving pieces of state in the system. Bitcoin uses UTXOs as it is a network purposefully designed to be as simple and stateless as possible.
+
+## Further Reading on UTXOs
+
+### Real Transactions
+
+We can take a look at the [Genesis Block](https://www.blockchain.com/btc/block/0) and see that there was a coinbase transaction sent to [1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa](https://www.blockchain.com/btc/address/1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa) which was never spent!
+
+Here's some more information about the [Genesis Block](https://en.bitcoin.it/wiki/Genesis_block). The `scriptPubKey` is also called the "Witness Script" or the "Locking Script".
+
+For each **Locking Script** there should be an **Unlocking Script** that will unlock the UTXO and allow it to spent. Typically, all the unlocking script needs to provide is a signature that verifies ownership of a public key, and then the public key needs to match the address after being hashed twice.
+
+If you look down in that wiki article, you'll see that the Genesis Block Coinbase UTXO is not included in client's database, so it cannot be spent! For more information on that [see here](https://bitcoin.stackexchange.com/questions/10009/why-can-t-the-genesis-block-coinbase-be-spent).
+
+## Bitcoin Script
+
+The Bitcoin Script language is meant to be a simple stack-based language that has no loops so it will always resolve and there are no denial of service attacks. The language is basically a list of function-like operation codes, that take arguments off the stack and operate on them. See the full list of [operation codes here](https://en.bitcoin.it/wiki/Script).
+
+You can find some interesting background on Bitcoin Script in this [Stack Overflow answer here](https://bitcoin.stackexchange.com/a/29763). The author of that answer mentions a bug with `OP_RETURN` and concatenating the unlock and locking scripts. You can find more background information on that [here](https://bitcoinsv.io/2019/07/27/the-return-of-op_return-roadmap-to-genesis-part-4/).
+
+Someone made a [JavaScript implementation of Script](https://github.com/crm416/script). 
+
+Two common forms of transaction scripts for Bitcoin are the [Pay-to-Pubkey](https://en.bitcoinwiki.org/wiki/Pay-to-Pubkey_Hash) Hash and [Pay-to-Script Hash](https://en.bitcoin.it/wiki/Pay_to_script_hash).
