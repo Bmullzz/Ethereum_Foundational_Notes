@@ -1,5 +1,5 @@
 ## Overview 
-- Cryptographic has functions and why they are useful.
+- Cryptographic hash functions and why they are useful.
 - Public key cryptography
 - Merkle Trees
 - Blockchain as a data structure

@@ -1,3 +1,11 @@
+# Blockchain and Crypto
+
+- Programs on the Ethereum Blockchain are known as Smart Contracts.
+- This page will discuss what purpose blockchains serve and discuss the first core cryptographic primitive: **the cryptographic hash function**.
+
+## Blockchains
+- To understand how blockchains work, let’s start off with some high level questions.
+
 ## What is the purpose of blockchain?
 - The purpose of a blockchain is to have a **network of computers agree upon a common state of data**. Plain and simple. Any person or organization should be able to participate in this process. No person or organization should be able to control this process.
     - Generally the term consensus is used to describe a network coming to an agreement on the state of the data. You'll hear this word quite often in regards to blockchain.
