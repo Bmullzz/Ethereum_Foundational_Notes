@@ -1,0 +1,89 @@
+# Hardhat
+
+## Intro
+
+You might be wondering, what the heck is Hardhat!? We'll define that shortly, but the important concept to know is that we've made it to the most powerful Ethereum smart contract development tool.
+
+We started at the low-level and have slowly moved our way up to the high-level. This is the flow the AU Ethereum Developer Bootcamp has taken:
+
+1. Blockchain and Cryptography Fundamentals
+
+2. Blockchain Account Tracking and Blockchain Storage
+
+3. Ethereum Introduction and Using JSON-RPC to Read, Signed JSON-RPC to Write, Ethers.js & Alchemy SDK for Higher Developer Abstraction
+
+4. Solidity Syntax, Smart Contracts and Hardhat (we are here!!)
+
+Hardhat is an extremely powerful tool for any developer in web3. Let's dive in...
+
+## What is [Hardhat](https://hardhat.org/)?
+
+[Hardhat](https://hardhat.org/) is a development environment to compile, deploy, test, and debug Ethereum smart contracts.
+
+## Why Hardhat?
+
+It helps developers manage and automate the recurring tasks that are inherent to the process of building smart contracts and dApps, as well as easily introducing more functionality around this workflow.
+
+## Hardhat Features
+
+Hardhat facilitates common development flows for smart contracts with the following features:
+
+- Local testing, including local Hardhat Network (super useful!!)
+
+- Solidity compilation and error-checking
+
+- Flexible combination with other tooling/plugins (ie, Ethers.js)
+
+- Easy deployment of and interaction with smart contracts
+
+## Hardhat Project Structure
+
+When you initialize a Hardhat project in your local environment, the structure includes the following important files/folders:
+
+1. `/contracts`: All of your .sol files
+
+2. `/scripts`: .js files for running scripts
+
+3. `/artifacts`: artifacts produced out of the contract compilation
+
+4. `/test`: .js files for using testing libraries
+
+5. `hardhat.config.js`: file with project configurations (very important!!!!)
+
+## Important Hardhat Concepts
+
+The `hardhat.config.js` file is the most important file in your project!
+
+- If you have a bug/issue, this is first file to look at!
+
+Also, when you compile a contract, its artifacts (the ABI and bytecode) will be stored in a newly created `/artifacts` folder
+
+## AU Suggested Hardhat Flow
+
+Want to get up and running with a Hardhat project? Just follow this flow:
+
+1. Open a terminal
+
+2. Run `cd Desktop`, then create a new folder via `mkdir au-hardhat-practice`, then move into that newly-created folder by running `cd au-hardhat-practice`
+
+3. Once you are in the `au-hardhat-practice` folder, in your terminal run `npm init -y` to initialize a `package.json`
+
+4. Run `npm i hardhat`
+
+5. Run `npm i dotenv`
+
+6. Run `touch .env` in order to create a `.env` file at the root-level of your project, then populate it with important data and save
+
+7. Run `npx hardhat` which will initialize a brand new Hardhat project
+
+8. We recommend the following flow: Choose the current root > `YES` to the `.gitignore` > `YES` to install the sample project's dependencies
+
+9. Add `require(‘dotenv’).config()` at the top of your `hardhat.config.js` file
+
+10. Add `networks` flag to `hardhat.config.js`, add your Alchemy RPC URL under `url` and your testnet private key under `accounts`
+
+11. Set up your scripts and contracts, then deploy in a flash!
+
+## Conclusion
+
+Hardhat is one of the ultimate web3 developer tools. It is specifically built cover the entire smart contract developer flow end-to-end. Master it, and thou shalt become a Web3 Master. 
