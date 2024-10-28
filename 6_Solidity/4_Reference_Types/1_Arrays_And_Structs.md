@@ -1,0 +1,250 @@
+# Arrays & Structs
+
+## Solidity Reference Types
+
+At this point, you are well on your way to becoming a Solidity master. We've looked at the [primitive data types in Solidity](https://solidity-by-example.org/primitives/), such as:
+
+- `uint`/`int`
+- `boolean`
+- `address`
+- `enum`
+- `bytes`
+
+Primitive data types can also be referred to as "value types". A **value type** stores its data directly in the variable.
+
+Solidity, like most other object-oriented programming languages, has another type of data for reference-based data types, such as:
+
+- `arrays`
+- `strings`
+- `structs`
+- `mappings` (also reference types, but we've already covered them quite heavily!)
+
+A **reference type** does not store values directly in a variable. Instead, reference types hold a pointer to the address of the data's location.
+
+The two main reference types we will cover today are: **arrays** and **structs**. Let's dive in... 
+
+## Arrays
+
+In computer science, an **array** is a data structure consisting of a collection of elements (values or variables), each identified by at least one array _index_ or _key_. In Solidity, an array can be both of fixed or dynamic size.
+
+- Of course, Solidity arrays function much the same. So from now on, when we say arrays, we mean Solidity arrays!
+
+## What Are Dynamic & Fixed Arrays?
+
+The size of **dynamic arrays** are not predefined when they are declared. As elements are systematically added, the size of the dynamic array changes, and during runtime, the actual size of the array will be determined.
+
+In contrast, **fixed arrays** have a predefined size, and the quantity of elements present in the array should not exceed the size of the array.
+
+## Storage Arrays
+
+**Storage arrays** are typically declared as state variables and can be either fixed or dynamic in size. Here's a Solidity code snipper declaring both a fixed and dynamic-sized array in a simple `MyContract`:
+
+```solidity
+contract MyContract {
+    // Several ways to initialize an array
+
+    // Dynamic sized array
+    uint[] public arr;
+
+    // Fixed sized arrays
+    uint[] public arr2 = [1, 2, 3]; 
+    // all elements initialize to 0
+    uint[10] public myFixedSizeArr;
+}
+```
+
+Both fixed and dynamic sized arrays have access to the `.length` array member:
+
+- `.length`: returns how many values an array holds per index
+
+Dynamic storage arrays have the typical array methods available, such as:
+
+- `.push()`: used to add an element to the array at the _last_ position
+- `.pop()`: used to remove an element of the array at the last position
+
+We won't go super deep into arrays, as they typically follow the same conventions as most other programming languages do. We highlight some key takeaways though:
+
+1.  Be careful with iterating arrays, as that can be costly to your smart contract users! Array iteration is not a recommended pattern for smart contract developers
+
+2. Review [Solidity by Example](https://solidity-by-example.org/array/) - Arrays for further examples of array members and functionality
+
+Let's dive into a Solidity-specific data structure, not typically found in other programming languages like arrays are... 
+
+## Structs
+
+Up until now, we've looked at all of the _defined_ data types in Solidity. One super cool feature about Solidity is it allows you to define _your own custom data type_.
+
+You can define your own custom data type by creating a `struct`. Struct types are typically used to represent a _record_, or a grouping of common data.
+
+The syntax to declare a struct in Solidity resembles an object declaration in JavaScript:
+
+```solidity
+struct structName {
+   type1 typeName1;
+   type2 typeName2;
+   type3 typeName3;
+}
+```
+
+Super easy! Let's look at a specific use case for structs to help us further understand the concept..
+
+## Struct Use Cases: Library Record Keeping
+
+What if we wanted to have an immutable record of all the library books we cared about?  Keeping our book records on a centralized server somewhere might not be ideal, since it might be taken down or corrupted by the server admin. In come smart contracts! 
+
+We can create a smart contract called `Library` and equip it with all the functionality we'd need to perform detailed record keeping for books. For now, we can just work off of a single assumption / user story:
+
+- For each book record I add to my `Library` smart contract, I want to keep track of its `title`, `author` and some sort of `id` for internal record-keeping
+
+The above assumption would mean lines and lines of code... if we didn't have Solidity structs.
+
+So, let's define a smart contract called `Library` and define a struct called `Book` inside its scope. The `Book` struct should keep track of all the properties we listed in the assumption above:
+
+```solidity
+contract Library {
+
+    struct Book {
+        string title;
+        string author;
+        uint bookId;
+    }
+
+}
+```
+
+Great! We've got the base setup done. Any further functionality will be structured around this same `Book` struct and its properties.
+
+A `Book` struct is specific to one book... so we need a way to keep track of many of the same type... anything ring a bell here? That's right, we can use an array. Let's add it to our `Library`:
+
+```solidity
+contract Library {
+
+    struct Book {
+        string title;
+        string author;
+        uint bookId;
+    }
+
+    Book[] public books;
+}
+```
+
+Sweet! An array here will make it super easy to keep indexed track of each `Book` struct, along with each book's specific properties.
+
+What if we want to add a book? We can do so with a function `addBook()`:
+
+```solidity
+contract Library {
+
+    struct Book {
+        string title;
+        string author;
+        uint bookId;
+    }
+
+    Book[] public books;
+
+    function addBook(string memory _title, string memory _author) public {
+        books.push(Book(_title, _author, books.length));
+    }
+}
+```
+
+Ok, let's break down the `addBook()` function real quick:
+
+- The `string` parameters use `memory`. This is a requirement of Solidity whenever you use reference types as a parameter, you must precede the parameter with either `memory` or `calldata`. This is just telling the Solidity compiler where the data being passed in lives. Since this is an ephemeral call, we are passing in the value from `memory`.
+
+- We use `books.push()` in order to push a brand new Book struct
+
+- We initialize the struct by calling it exactly like you would a function: `Book(_param1, param2, ...)` - that is the easiest one but you can also initialize structs like so:
+
+```solidity
+    // key value mapping
+    todos.push(Todo({text: _text, completed: false}));
+    
+    // initialize an empty struct in local memory and then update it
+    Todo memory todo;
+    todo.text = _text;
+```
+
+Ok great! We can now add new books to our library and push em to the `books` array for record-keeping. What if we want to retrieve a book from this record? We can add a simple getter and retrieve based on the `bookId`:
+
+```solidity
+contract Library {
+
+    struct Book {
+        string title;
+        string author;
+        uint bookId;
+    }
+
+    Book[] public books;
+
+    function addBook(string memory _title, string memory _author) public {
+        books.push(Book(_title, _author, books.length));
+    }
+    
+    function get(uint _bookId) public view returns (string memory _title, string memory _author) {
+        return(books[_bookId].title, books[_bookId].author);
+    }
+}
+```
+
+Awesome! Now anyone can pass in a book id and the smart contract will return that book id's title and author!
+
+One final function to add before we wrap up the awesomeness of structs is `update()`, that way we can update a book title or author for any reason (mainly for an easy example, since we probably wouldn't want to update such a record after it's been sealed!).
+
+**But wait!**
+
+One more thing... notice how all of our functions are `public`? This means anyone could mess with our cool library and we don't want that! Let's make it so that each `Book` holds an `address` property, and ONLY that specific address can perform certain changes in the contract:
+
+Let's add a `registrant` of type `address` on the `Book` struct. Let's also add an `update()` function:
+
+- Be careful! Since we are adding a new property to the `Book` struct, we will have to change any previous calls to `Book` to also account for it!
+
+```solidity
+contract Library {
+
+    struct Book {
+        string title;
+        string author;
+        uint bookId;
+        address registrant;
+    }
+
+    Book[] public books;
+
+    function addBook(string memory _title, string memory _author) public {
+        // whoever adds a book, that is the registrant on this book
+        books.push(Book(_title, _author, books.length, msg.sender));
+    }
+    
+    function get(uint _bookId) public view returns (string memory _title, string memory _author) {
+        return(books[_bookId].title, books[_bookId].author);
+    }
+    
+    function update(uint _bookId, string memory _newTitle, string memory _newAuthor) public {
+        // protect our book record by only making
+        // this function available to the original registrant
+        require(msg.sender == books[_bookId].registrant, 'You must have been the one to add the book to change the record!');
+        
+        books[_bookId].title = _newTitle;
+        books[_bookId].author = _newAuthor;
+    }
+}
+```
+
+Amazing. We've just coded a whole contract that has soooo much functionality in so few lines! Plus, it protects our records by checking the `msg.sender` in the `update()` function!
+
+## Suggested Reading
+
+- [Solidity by Example - Structs](https://solidity-by-example.org/structs/)
+- [Open Source Project By AU Student](https://github.com/chiranz/rps_game/blob/main/contracts/RPSGame.sol)
+
+## Conclusion
+
+Structs are super useful in Solidity. They are a custom data type... so they are fitting for any custom record-keeping needs you might think of! Another example would be a `Player` struct that keeps track of that player's `address`, `level`, etc... 
+
+- Want to see a 15-minute run-through of Structs using the same Library example as above? [Here's Al covering Structs at DevConnect 2022 Amsterdam](https://youtu.be/NuGF1wsYxQA?t=9849)
+
+
